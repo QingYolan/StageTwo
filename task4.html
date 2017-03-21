@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>task4</title>
+</head>
+<style type="text/css">
+	.array {
+		margin-top: 10px;
+	}
+	.array a {
+		padding: 5px;
+		margin-right: 5px;
+		background-color: red;
+	}
+</style>
+<body>
+    <div>
+    	<input type="text" name="number">
+    	<button type="button" onclick="addOrDelete(1,1)">左侧入</button>
+    	<button type="button" onclick="addOrDelete(1,-1)">右侧入</button>
+    	<button type="button" onclick="addOrDelete(-1,1)">左侧出</button>
+    	<button type="button" onclick="addOrDelete(-1,-1)">右侧出</button>
+    </div>
+    <div class="array">
+    </div>
+</body>
+<script type="text/javascript">
+	var nums=[3,10,7,21,43];
+	var c=document.getElementsByClassName('array')[0];
+	(function(){
+		nums.forEach(function(v,i){
+			var e=document.createElement('a');
+			var t=document.createTextNode(v);
+			e.appendChild(t);
+			c.appendChild(e);
+		});
+	})();
+	c.addEventListener('click',function(e){
+		var e=e||window.event;
+		var target=e.target||e.srcElement;
+		if(target&&target.nodeName=='A'){
+			alert(target.innerText);
+			c.removeChild(target);
+		}
+
+	});
+	/*
+	**type>0 入列；type<0 出列；
+	**direction>0 左；direction<0 右；
+	*/
+	function addOrDelete(type, direction){
+		var v=document.getElementsByTagName('input')[0].value;
+		if(isNaN(v)){
+			alert('请输入数字');
+			return false;
+		}
+		var e=document.createElement('a');
+		var t=document.createTextNode(v);
+		e.appendChild(t);
+		if(type>0){
+			if(direction>0){
+				//左侧入
+				var firstE=c.firstChild;
+				nums.unshift(v);
+				c.insertBefore(e,firstE);
+			}
+			if(direction<0){
+				//右侧入
+				nums.push(v);
+				c.appendChild(e);
+			}
+			
+		}
+		if(type<0){
+			if(direction>0){
+				//左侧出
+				var firstE=c.firstChild;
+				nums.pop();
+				alert(firstE.innerText);
+				c.removeChild(firstE);
+			}
+			if(direction<0){
+				//右侧出
+				var lastE=c.lastChild;
+				nums.shift();
+				alert(lastE.innerText);
+				c.removeChild(lastE);
+			}
+		}
+	}
+</script>
+</html>
