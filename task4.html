@@ -50,7 +50,7 @@
 	*/
 	function addOrDelete(type, direction){
 		var v=document.getElementsByTagName('input')[0].value;
-		if(isNaN(v)){
+		if(v==""||isNaN(v)){
 			alert('请输入数字');
 			return false;
 		}
