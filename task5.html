@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>task5</title>
+</head>
+<style type="text/css">
+.array {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+    margin-top: 30px;
+}
+
+.array a {
+    position: relative;
+    display: inline-block;
+    width: 15px;
+    margin-right: 5px;
+    background-color: red;
+}
+
+.sortBtns {
+    margin: 10px 0;
+}
+</style>
+
+<body>
+    <div>
+        <input type="text" name="number">
+        <button type="button" onclick="addOrDelete(1,1)">左侧入</button>
+        <button type="button" onclick="addOrDelete(1,-1)">右侧入</button>
+        <button type="button" onclick="addOrDelete(-1,1)">左侧出</button>
+        <button type="button" onclick="addOrDelete(-1,-1)">右侧出</button>
+    </div>
+    <div class="sortBtns">
+        <button type="button" onclick="bubbleSort()">冒泡排序</button>
+        <button type="button" onclick="selectSort()">选择排序</button>
+    </div>
+    <div class="array">
+    </div>
+</body>
+<script type="text/javascript">
+var nums = [54, 23, 10, 24, 43];
+var c = document.getElementsByClassName('array')[0];
+(function() {
+    display(nums);
+})();
+/*
+ **type>0 入列；type<0 出列；
+ **direction>0 左；direction<0 右；
+ */
+function addOrDelete(type, direction) {
+    if (type > 0) {
+        var v = document.getElementsByTagName('input')[0].value;
+        if (v == "" || isNaN(v) || v < 10 || v > 100) {
+            alert('请输入10-100间的数字');
+            return false;
+        }
+        var e = document.createElement('a');
+        e.style.height = v + 'px';
+
+        if (direction > 0) {
+            //左侧入
+            var firstE = document.getElementsByTagName('a')[0];
+            nums.unshift(parseInt(v));
+            c.insertBefore(e, firstE);
+        }
+        if (direction < 0) {
+            //右侧入
+            nums.push(parseInt(v));
+            c.appendChild(e);
+        }
+
+    }
+    if (type < 0) {
+        if (direction > 0) {
+            //左侧出
+            var firstE = document.getElementsByTagName('a')[0];
+            nums.pop();
+            alert(firstE.style.height.replace('px', ''));
+            c.removeChild(firstE);
+        }
+        if (direction < 0) {
+            //右侧出
+            var lastE = document.getElementsByTagName('a')[nums.length - 1];
+            nums.shift();
+            alert(lastE.style.height.split('px')[0]);
+            c.removeChild(lastE);
+        }
+    } 
+}
+
+function bubbleSort(){
+	console.log(nums);
+	for(var i=0;i<nums.length;i++){
+		for(var j=0;j<nums.length-i-1;j++){
+			if(nums[j]>nums[j+1]){
+				swap(nums,j,j+1);
+			}
+		}
+	}
+	console.log(nums);
+	display(nums);
+}
+function selectSort(){
+	console.log(nums);
+	for(var i=0;i<nums.length-1;i++){
+		var min=nums[i];
+		var minIndex=i;
+		for(j=i+1;j<nums.length;j++){
+			if(nums[j]<min){
+				min=nums[j];
+				minIndex=j;
+			}
+
+		}
+		swap(nums,i,minIndex);
+	}
+	console.log(nums);
+	display(nums);
+}
+
+function swap(array,a,b){
+	var temp=array[a];
+	array[a]=array[b];
+	array[b]=temp;
+}
+function display(nums){
+	c.innerHTML="";
+	nums.forEach(function(v, i) {
+        var e = document.createElement('a');
+        e.style.height = v + 'px';
+        c.appendChild(e);
+    });
+}
+</script>
+
+</html>
