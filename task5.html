@@ -42,14 +42,12 @@
 </body>
 <script type="text/javascript">
 var nums = [54, 23, 10, 24, 43];
+var timer;//全局定时器
 var c = document.getElementsByClassName('array')[0];
 (function() {
     display(nums);
 })();
-/*
- **type>0 入列；type<0 出列；
- **direction>0 左；direction<0 右；
- */
+//入队、出队操作
 function addOrDelete(type, direction) {
     if (type > 0) {
         var v = document.getElementsByTagName('input')[0].value;
@@ -78,33 +76,32 @@ function addOrDelete(type, direction) {
             //左侧出
             var firstE = document.getElementsByTagName('a')[0];
             nums.pop();
-            alert(firstE.style.height.replace('px', ''));
             c.removeChild(firstE);
         }
         if (direction < 0) {
             //右侧出
             var lastE = document.getElementsByTagName('a')[nums.length - 1];
             nums.shift();
-            alert(lastE.style.height.split('px')[0]);
             c.removeChild(lastE);
         }
     } 
 }
-
+//冒泡
 function bubbleSort(){
-	console.log(nums);
-	for(var i=0;i<nums.length;i++){
+	var processData=[];
+	for(var i=0;i<nums.length-1;i++){
 		for(var j=0;j<nums.length-i-1;j++){
 			if(nums[j]>nums[j+1]){
 				swap(nums,j,j+1);
+				processData.push(nums.slice(0));
 			}
 		}
 	}
-	console.log(nums);
-	display(nums);
+	timer=setInterval(function(){displayProcess(processData);},1000);
 }
+//选择
 function selectSort(){
-	console.log(nums);
+	var processData=[];
 	for(var i=0;i<nums.length-1;i++){
 		var min=nums[i];
 		var minIndex=i;
@@ -116,9 +113,9 @@ function selectSort(){
 
 		}
 		swap(nums,i,minIndex);
+		processData.push(nums.slice(0));
 	}
-	console.log(nums);
-	display(nums);
+	timer=setInterval(function(){displayProcess(processData);},1000);
 }
 
 function swap(array,a,b){
@@ -126,14 +123,21 @@ function swap(array,a,b){
 	array[a]=array[b];
 	array[b]=temp;
 }
-function display(nums){
+function display(data){
 	c.innerHTML="";
-	nums.forEach(function(v, i) {
+	data.forEach(function(v, i) {
         var e = document.createElement('a');
         e.style.height = v + 'px';
         c.appendChild(e);
     });
 }
+//展示排序过程
+function displayProcess(processData){
+	var data=processData.shift()||[];
+	display(data);
+	if(processData.length<=0){
+		clearInterval(timer);
+	}
+}
 </script>
-
 </html>
