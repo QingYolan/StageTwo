@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>task6</title>
+</head>
+<style type="text/css">
+	#inputContent {
+		width: 300px;
+		height: 100px;
+		margin-top: 10px;
+	}
+	.word {
+		margin-right: 10px;
+	}
+	.match {
+		color: red;
+	}
+</style>
+<body>
+<div>
+	<input type="text" name="key" >
+	<button type="button" onclick="search()">查询</button>
+</div>
+<div>
+	<textarea id="inputContent"></textarea>
+	<button type="button" onclick="insert()">插入</button>
+	<p id="showContent"></p>
+</div>
+</body>
+<script type="text/javascript">
+    //模糊查询
+	function search(){
+		var key=document.querySelector('input[name="key"]').value;
+		var wordList=document.getElementsByClassName('word');
+		for(var i=0;i<wordList.length;i++){
+			var word=wordList[i].innerText;
+			var partList=[];
+			while(word.length>=key.length){
+				var firstIndex=word.indexOf(key);
+				if(firstIndex<0) {
+					partList.push(word);
+					break;
+				}
+				firstIndex=firstIndex==0?key.length:firstIndex;
+				partList.push(word.slice(0,firstIndex));
+				word=word.slice(firstIndex);
+			}
+			wordList[i].innerHTML="";
+			partList.forEach(function(v,index){
+				if(v==key){
+					wordList[i].innerHTML+='<span class="match">'+v+'</span>';
+				}
+				else {
+					wordList[i].innerHTML+=v;
+				}
+			});
+		}
+	}
+	function insert(){
+		var stringText=document.getElementById('inputContent').value;
+		var textContainer=document.getElementById('showContent');
+		var patt=/[^0-9a-zA-Z\u4e00-\u9fa5]/g;
+		var wordList=stringText.split(patt);
+		wordList.forEach(function(v,i){
+			if(v.length>0){
+				textContainer.innerHTML+='<span class="word">'+v+'</span>';
+			}
+		})
+	}
+</script>
+</html>
