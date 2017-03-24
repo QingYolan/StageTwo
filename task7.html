@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>task7</title>
+</head>
+<style type="text/css">
+div {
+    box-sizing: border-box;
+    display: flex;
+    border: solid 1px;
+    position: relative;
+    background-color: white;
+}
+#btns {
+    border: none;
+    flex-direction: column;
+}
+#btns div {
+	border: none;
+	justify-content: center;
+	margin-top: 10px;
+}
+#btns button {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+#container {
+    margin: auto;
+    position: absolute;
+    top: 150px;
+    left: 0;
+    right: 0;
+    align-content: flex-start;
+    align-items: flex-start;
+    flex-flow: row nowrap;
+    display: none;
+}
+</style>
+
+<body>
+    <div id="btns">
+        <div>
+            <input id="deep" type="number" name="deep" placeholder="请输入要生成二叉树的深度k">
+            <button type="button" onclick="generate()">生成二叉树</button>
+        </div>
+        <div>
+            <button type="button" onclick="btn_preOrder()">前序遍历</button>
+            <button type="button" onclick="btn_midOrder()">中序遍历</button>
+            <button type="button" onclick="btn_afterOrder()">后序遍历</button>
+        </div>
+    </div>
+    <div id="container"></div>
+</body>
+<script type="text/javascript">
+var minW = 20;
+var minH = 20;
+var padding = 10;
+var margin = 5;
+var nodesList=[];
+//生成深度为k的二叉树
+function generateTree(k) {
+    if (k < 1)
+        return false;
+    var n = Math.pow(2, k) - 1;
+    var nk = Math.pow(2, (k - 1));
+    var parentW = minW * nk + padding * (n - nk) * 2 + margin * 2 * (nk - 1);
+    var parentH = minH + padding * (k - 1) * 2;
+    var parent = document.getElementById('container');
+    parent.innerHTML = "";
+    parent.style.width = parentW + 'px';
+    parent.style.height = parentH + 'px';
+    addChildTrees(parent, parentW, parentH, 1, k);
+    parent.style.display = 'flex';
+}
+//增加子树
+function addChildTrees(parent, parentW, parentH, cur, k) {
+    if (cur < k) {
+        parent.style.padding = padding + 'px';
+        for (var j = 0; j < 2; j++) {
+            var w = (parentW - padding * 2 - margin * 2) * 0.5;
+            var h = parentH - padding * 2;
+            console.log(w, h);
+            var child = document.createElement('div');
+            child.style.width = w + 'px';
+            child.style.height = h + 'px';
+            if (j == 0) {
+                child.style.marginRight = margin + 'px';
+            } else {
+                child.style.marginLeft = margin + 'px';
+            }
+            parent.appendChild(child);
+            addChildTrees(child, w, h, cur + 1, k);
+        }
+    }
+    return false;
+}
+//前序遍历
+function preOrder(cur){	
+	if(cur){
+		nodesList.push(cur);
+		preOrder(cur.childNodes[0]);		
+		preOrder(cur.childNodes[1]);
+	}	
+}
+//中序遍历
+function midOrder(cur){
+	if(cur){
+		midOrder(cur.childNodes[0]);
+		nodesList.push(cur);
+		midOrder(cur.childNodes[1]);
+	}
+}
+//后序遍历
+function afterOrder(cur){
+	if(cur){
+		afterOrder(cur.childNodes[0]);
+		afterOrder(cur.childNodes[1]);
+		nodesList.push(cur);
+	}
+}
+//展示遍历过程
+function show(){
+	nodesList.forEach(function(v,i){
+		setTimeout(function(){
+			if(i>0){
+				nodesList[i-1].style.backgroundColor='white';
+			}
+			v.style.backgroundColor='red';
+		},500*i);
+	});
+}
+function btn_preOrder(){
+	nodesList=[];
+	preOrder(document.getElementById('container'));
+	show();
+	nodesList[nodesList.length-1].style.backgroundColor='white';
+}
+function btn_midOrder(){
+	nodesList=[];
+	midOrder(document.getElementById('container'));
+	show();
+	nodesList[nodesList.length-1].style.backgroundColor='white';
+}
+function btn_afterOrder(){
+	nodesList=[];
+	afterOrder(document.getElementById('container'));
+	show();
+	nodesList[nodesList.length-1].style.backgroundColor='white';
+}
+function generate() {
+    var k = parseInt(document.getElementById('deep').value);
+    generateTree(k);
+}
+</script>
+
+</html>
